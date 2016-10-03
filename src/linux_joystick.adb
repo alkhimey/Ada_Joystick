@@ -135,7 +135,7 @@ package body Linux_Joystick is
                     Time           => Raw_Js_Event.Time,
                     Is_Init_Event  => Raw_Js_Event.Is_Init_Event,
                     Button         => Button_Type'Val(Raw_Js_Event.Axis_Button_Number),
-                    Button_Action  => Button_Action_Type'Val(Raw_Js_Event.Value) );  -- TODO: Convert...
+                    Button_Action  => Button_Action_Type'Val(Raw_Js_Event.Value) );
          when JS_EVENT_AXIS =>
          
             return (Event_Type     => JS_EVENT_AXIS,
