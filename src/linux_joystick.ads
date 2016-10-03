@@ -61,9 +61,6 @@ package Linux_Joystick is
 
       end record;
 
-
-
-   procedure Put(Js_Event : in Js_Event_Type);
    function  Open return String;
    procedure Open(Name : String);
    function  Read return Js_Event_Type;

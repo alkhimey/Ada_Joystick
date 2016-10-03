@@ -22,9 +22,7 @@
 -- 
 --
 
-with Text_IO;
 with Ada.Sequential_IO;
-with Ada.Characters.Latin_1;
 with Ada.Directories;
 
 package body Linux_Joystick is
@@ -55,40 +53,6 @@ package body Linux_Joystick is
    package SIO is new Ada.Sequential_IO(Raw_Js_Event_Type);
 
    Input_File : SIO.File_Type;
-      
-   procedure Put(Js_Event : in Js_Event_Type) is
-
-      package Millisecinds_IO is new Text_IO.Integer_IO(Milliseconds_Type);
-      package Value_IO        is new Text_IO.Integer_IO(Value_Type);
-
-   begin
-      Text_IO.Put(if Js_Event.Is_Init_Event then "I" else " ");
-      Text_IO.Put(Ada.Characters.Latin_1.HT);
-
-      Millisecinds_IO.Put(Js_Event.Time);
-      Text_IO.Put(Ada.Characters.Latin_1.HT);
-
-      Text_IO.Put(Event_Type_Type'Image(Js_Event.Event_Type));
-      Text_IO.Put(Ada.Characters.Latin_1.HT);
-
-      case Js_Event.Event_Type is      
-         when JS_EVENT_BUTTON =>
-            Text_IO.Put(Button_Type'Image(Js_Event.Button));
-            Text_IO.Put(Ada.Characters.Latin_1.HT);            
-            
-            Text_IO.Put(Button_Action_Type'Image(Js_Event.Button_Action));
-
-         when JS_EVENT_AXIS =>
-         
-            Text_IO.Put(Axis_Type'Image(Js_Event.Axis));
-            Text_IO.Put(Ada.Characters.Latin_1.HT);
-
-            Value_IO.Put(Js_Event.Value);
-      end case;   
-
-      Text_IO.New_Line;
-   end;
-
 
    procedure Open(Name : String) is
 

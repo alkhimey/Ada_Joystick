@@ -26,6 +26,7 @@
 
 with Linux_Joystick;
 with Text_IO;
+with Ada.Characters.Latin_1;
 
 procedure Main is
 
@@ -42,6 +43,45 @@ procedure Main is
    package L3D is new Linux_Joystick(Button_Type => Logiteck_Extreme_3D_Pro_Button_Type,
                                      Axis_Type   => Logiteck_Extreme_3D_Pro_Axis_Type);
 
+   generic
+      with package JSP is new Linux_Joystick (<>);
+   procedure Put(Js_Event : in JSP.Js_Event_Type);
+   
+   procedure Put(Js_Event : in JSP.Js_Event_Type) is
+
+      package Millisecinds_IO is new Text_IO.Integer_IO(JSP.Milliseconds_Type);
+      package Value_IO        is new Text_IO.Integer_IO(JSP.Value_Type);
+
+   begin
+      Text_IO.Put(if Js_Event.Is_Init_Event then "I" else " ");
+      Text_IO.Put(Ada.Characters.Latin_1.HT);
+
+      Millisecinds_IO.Put(Js_Event.Time);
+      Text_IO.Put(Ada.Characters.Latin_1.HT);
+
+      Text_IO.Put(JSP.Event_Type_Type'Image(Js_Event.Event_Type));
+      Text_IO.Put(Ada.Characters.Latin_1.HT);
+
+      case Js_Event.Event_Type is      
+         when JSP.JS_EVENT_BUTTON =>
+            Text_IO.Put(JSP.Button_Type'Image(Js_Event.Button));
+            Text_IO.Put(Ada.Characters.Latin_1.HT);            
+            
+            Text_IO.Put(JSP.Button_Action_Type'Image(Js_Event.Button_Action));
+
+         when JSP.JS_EVENT_AXIS =>
+         
+            Text_IO.Put(JSP.Axis_Type'Image(Js_Event.Axis));
+            Text_IO.Put(Ada.Characters.Latin_1.HT);
+
+            Value_IO.Put(Js_Event.Value);
+      end case;   
+
+      Text_IO.New_Line;
+   end;
+
+   procedure Put_L3D is new Put(L3D);
+
 begin
 
    declare
@@ -53,7 +93,7 @@ begin
          declare
             Js_Event :  L3D.Js_Event_Type := L3D.Read;
          begin
-            L3D.Put(Js_Event);
+            Put_L3D(Js_Event);
          end;
       end loop;
       
