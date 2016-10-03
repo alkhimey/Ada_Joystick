@@ -42,20 +42,23 @@ procedure Main is
    package L3D is new Linux_Joystick(Button_Type => Logiteck_Extreme_3D_Pro_Button_Type,
                                      Axis_Type   => Logiteck_Extreme_3D_Pro_Axis_Type);
 
-   Opended_Device_Path : String := L3D.Open;
-
 begin
 
-   Text_IO.Put_Line("Opended device at: " & Opended_Device_Path);
+   declare
+      Opended_Device_Path : String := L3D.Open;
+   begin
+      Text_IO.Put_Line("Opended device at: " & Opended_Device_Path);
    
-   loop
-      declare
-         Js_Event :  L3D.Js_Event_Type := L3D.Read;
-      begin
-         L3D.Put(Js_Event);
-      end;
-   end loop;
-exception
-   when others => L3D.Close;
+      loop
+         declare
+            Js_Event :  L3D.Js_Event_Type := L3D.Read;
+         begin
+            L3D.Put(Js_Event);
+         end;
+      end loop;
+      
+      L3D.Close;
+
+   end;
 
 end Main;

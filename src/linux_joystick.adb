@@ -106,7 +106,7 @@ package body Linux_Joystick is
  
       if not Ada.Directories.More_Entries (Search) then
          Ada.Directories.End_Search (Search);
-         raise No_Device_Found;
+         raise No_Joystick_Device_Found;
       end if;
  
       Ada.Directories.Get_Next_Entry (Search, Dir_Ent);
