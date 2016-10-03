@@ -29,6 +29,8 @@ generic
    type Axis_Type   is (<>);
 package Linux_Joystick is
 
+   No_Joystick_Device_Found : Exception;
+
    type Milliseconds_Type is range 0..(2**32)-1;
    for Milliseconds_Type'Size use 32;
 
@@ -37,13 +39,11 @@ package Linux_Joystick is
 
    type Event_Type_Type is (JS_EVENT_BUTTON, JS_EVENT_AXIS);
    for Event_Type_Type use (JS_EVENT_BUTTON => 1, JS_EVENT_AXIS => 2);
+   for Event_Type_Type'Size use 7;
 
    type Button_Action_Type is (RELEASE, DEPRESS);
    for Button_Action_Type use (RELEASE => 0, DEPRESS => 1);
   
-
-   for Event_Type_Type'Size use 7;
-
    type Js_Event_Type(Event_Type : Event_Type_Type) is
       record
          Time               : Milliseconds_Type; 
@@ -64,8 +64,9 @@ package Linux_Joystick is
 
 
    procedure Put(Js_Event : in Js_Event_Type);
-   procedure Open(Name : String := "/dev/input/js1");
-   function Read return Js_Event_Type;
+   function  Open return String;
+   procedure Open(Name : String);
+   function  Read return Js_Event_Type;
    procedure Close;
 
 

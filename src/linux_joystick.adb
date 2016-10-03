@@ -25,6 +25,7 @@
 with Text_IO;
 with Ada.Sequential_IO;
 with Ada.Characters.Latin_1;
+with Ada.Directories;
 
 package body Linux_Joystick is
 
@@ -89,23 +90,40 @@ package body Linux_Joystick is
    end;
 
 
-   procedure Open(Name : String := "/dev/input/js1") is
+   procedure Open(Name : String) is
 
    begin
-   
       SIO.Open (File => Input_File,
                 Mode => SIO.IN_FILE,
-                Name => "/dev/input/js1");
-   
+                Name => Name);
+   end;
+
+   function Open return String is
+      Search      : Ada.Directories.Search_Type;
+      Dir_Ent     : Ada.Directories.Directory_Entry_Type;
+   begin
+      Ada.Directories.Start_Search (Search, "/dev/input/", "js*");
+ 
+      if not Ada.Directories.More_Entries (Search) then
+         Ada.Directories.End_Search (Search);
+         raise No_Device_Found;
+      end if;
+ 
+      Ada.Directories.Get_Next_Entry (Search, Dir_Ent);
+      
+      declare
+          Device_Path : String := Ada.Directories.Full_Name (Dir_Ent); 
+      begin
+         Ada.Directories.End_Search (Search);
+         Open(Device_Path);
+         return Device_Path;
+      end;
    end;
 
 
    function Read return Js_Event_Type is
-
       Raw_Js_Event : Raw_Js_Event_Type;
-
    begin
-
       SIO.Read(File => Input_File, 
                Item => Raw_Js_Event);
 
@@ -126,15 +144,11 @@ package body Linux_Joystick is
                     Axis           => Axis_Type'Val(Raw_Js_Event.Axis_Button_Number), 
                     Value          => Raw_Js_Event.Value );  
       end case;                     
-
    end;
 
    procedure Close is
    begin
-
       SIO.Close(Input_File);
-
    end;
-
 
 end Linux_Joystick;
