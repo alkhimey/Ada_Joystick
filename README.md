@@ -26,16 +26,39 @@ It is possible to use any scalar, as long as it is limited by 8 bits. For exampl
    type Logiteck_Extreme_3D_Pro_Button_Type is 
       (BUTTON_01, BUTTON_02, BUTTON_03, BUTTON_04,
        BUTTON_05, BUTTON_06, BUTTON_07, BUTTON_08,
-       BUTTON_09, BUTTON_10, BUTTON_11, BUTTON_12);   
+       BUTTON_09, BUTTON_10, BUTTON_11, BUTTON_12);
    
    package L3D is new Linux_Joystick(Button_Type => Logiteck_Extreme_3D_Pro_Button_Type,
                                      Axis_Type   => Logiteck_Extreme_3D_Pro_Axis_Type);
 
 ```
 
+
+### Xbox One Controller
+
+The bindings were successfully tested on Ubuntu with Steam's [version of the ```xpad```](https://github.com/paroj/xpad) driver.
+
+```Ada
+
+   type XBOX_One_Axis_Type is
+      (LEFT_STICK_X,  LEFT_STICK_Y,  LEFT_TRIGGER, 
+       RIGHT_STICK_X, RIGHT_STICK_Y, RIGHT_TRIGGER, 
+       DIRCTIONAL_PAD_X, DIRCTIONAL_PAD_Y);
+
+   type XBOX_One_Button_Type is 
+      (BUTTON_A, BUTTON_B, BUTTON_X, BUTTON_Y,
+       LEFT_BUMPER, RIGHT_BUMBER, 
+       BUTTON_SELECT, BUTTON_START, BUTTON_XBOX, 
+       LEFT_THUMB, RIGHT_THUMB);
+   
+   package LJS is new Linux_Joystick(Button_Type => XBOX_One_Button_Type,
+                                     Axis_Type   => XBOX_One_Axis_Type);
+
+```
+
 ## Example
 
-A _main.adb_ file is provided with an example of how to use the bindings.
+A _main.adb_ file is provided with an example of how to use the bindings. It has similar functionality as the ```jtest``` linux tool.
 
 ### Build the example
 
@@ -49,5 +72,5 @@ gprbuild -Pada_joystick.gpr --create-missing-dirs
 ./bin/main
 ```
 
-![Screenshot of example](example.png)
+![Screenshot of example with Logitech Extreme 3D Pro](example.png)
 
