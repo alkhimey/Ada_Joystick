@@ -30,18 +30,10 @@ with Ada.Characters.Latin_1;
 
 procedure Main is
 
-   
-   type Logiteck_Extreme_3D_Pro_Axis_Type is
-      (STICK_X, STICK_Y, STICK_Z, THROTTLE, HAT_X, HAT_Y);
-
-   type Logiteck_Extreme_3D_Pro_Button_Type is 
-      (BUTTON_01, BUTTON_02, BUTTON_03, BUTTON_04,
-       BUTTON_05, BUTTON_06, BUTTON_07, BUTTON_08,
-       BUTTON_09, BUTTON_10, BUTTON_11, BUTTON_12);
-
-   
-   package L3D is new Linux_Joystick(Button_Type => Logiteck_Extreme_3D_Pro_Button_Type,
-                                     Axis_Type   => Logiteck_Extreme_3D_Pro_Axis_Type);
+   type Common_Axis_Type   is range 0..20;
+   type Common_Button_Type is range 0..20;
+   package LJS is new Linux_Joystick(Button_Type => Common_Button_Type,
+                                     Axis_Type   => Common_Axis_Type);
 
    generic
       with package JSP is new Linux_Joystick (<>);
@@ -80,28 +72,34 @@ procedure Main is
       Text_IO.New_Line;
    end;
 
-   procedure Put_L3D is new Put(L3D);
+   procedure Put_LJS is new Put(LJS);
 
 begin
 
    declare
-      --Opended_Device_Path : String := L3D.Open;
+      -- It is also possible to use Open without parameters, it will automatically locate
+      -- an available "js*" file.
+      --
       Opended_Device_Path : String := "/dev/input/js1";
      
    begin
-       L3D.Open(Opended_Device_Path);
+      LJS.Open(Opended_Device_Path);
       Text_IO.Put_Line("Opended device at: " & Opended_Device_Path);
-   
+
       loop
          declare
-            Js_Event :  L3D.Js_Event_Type := L3D.Read;
+            Js_Event :  LJS.Js_Event_Type := LJS.Read;
          begin
-            Put_L3D(Js_Event);
+            Put_LJS(Js_Event);
          end;
       end loop;
-      
-      L3D.Close;
-
+   exception
+      -- It is advisable to handle the exceptions here:
+      -- ADA.IO_EXCEPTION.DEVICE_ERROR, LJS.No_Joystick_Device_Found etc.
+      --
+      when others =>
+         LJS.Close;
+         raise;
    end;
 
 end Main;
