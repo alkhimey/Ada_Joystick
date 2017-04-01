@@ -85,8 +85,11 @@ procedure Main is
 begin
 
    declare
-      Opended_Device_Path : String := L3D.Open;
+      --Opended_Device_Path : String := L3D.Open;
+      Opended_Device_Path : String := "/dev/input/js1";
+     
    begin
+       L3D.Open(Opended_Device_Path);
       Text_IO.Put_Line("Opended device at: " & Opended_Device_Path);
    
       loop
