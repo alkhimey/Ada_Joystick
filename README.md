@@ -43,7 +43,7 @@ The bindings were successfully tested on Ubuntu with Steam's [version of the ```
    type XBOX_One_Axis_Type is
       (LEFT_STICK_X,  LEFT_STICK_Y,  LEFT_TRIGGER, 
        RIGHT_STICK_X, RIGHT_STICK_Y, RIGHT_TRIGGER, 
-       DIRCTIONAL_PAD_X, DIRCTIONAL_PAD_Y);
+       DIRECTIONAL_PAD_X, DIRECTIONAL_PAD_Y);
 
    type XBOX_One_Button_Type is 
       (BUTTON_A, BUTTON_B, BUTTON_X, BUTTON_Y,
@@ -51,7 +51,7 @@ The bindings were successfully tested on Ubuntu with Steam's [version of the ```
        BUTTON_SELECT, BUTTON_START, BUTTON_XBOX, 
        LEFT_THUMB, RIGHT_THUMB);
    
-   package LJS is new Linux_Joystick(Button_Type => XBOX_One_Button_Type,
+   package LX1 is new Linux_Joystick(Button_Type => XBOX_One_Button_Type,
                                      Axis_Type   => XBOX_One_Axis_Type);
 
 ```
